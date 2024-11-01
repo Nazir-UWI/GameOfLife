@@ -6,19 +6,21 @@ public class Generator {
     private Random random = new Random();
 
     public void generate(){             //makes one generation of the grid, assume grid is wrapped along the x axis like a cylinder
+
         this.updateTempGrid();                  //update temp grid
-        this.overcrowdingRule();            //If a species is surrounded by 5 or more members, then due to overcrowding it disappears.
+        this.hatchingRule();                //If there are three species adjacent to each other, in the corners of a square, then a fourth is hatched
         this.updateGrid();                      //get changes from temp grid
 
-        this.updateTempGrid();                  
-        this.hatchingRule();                //If there are three species adjacent to each other, in the corners of a square, then a fourth is hatched
-        this.updateGrid();                      
+        this.updateTempGrid();
+        this.overcrowdingRule();            //If a species is surrounded by 5 or more members, then due to overcrowding it disappears.
+        this.updateGrid();
+
     }
 
     public void hatchingRule(){
         for (int row = 0; row < 10; row++){
             for (int col = 0; col < 10; col++){
-                if (this.grid.getValue(row, col) == 'X'){   //if position is occupied
+                if (this.grid.getValue(row, col) == '_'){   //if position is empty
                     this.hatchingRuleHelper(row, col);
                 }
             }
@@ -37,20 +39,20 @@ public class Generator {
         if (row+1 <= 9){n7 = this.grid.getValue(row+1, (col+0 + 10) % 10);}
         if (row+1 <= 9){n8 = this.grid.getValue(row+1, (col+1 + 10) % 10);}
 
-            if (n2 == 'X' && n4 == 'X'){                                    //corner 1
-                this.tempGrid.setValue(row-1, (col-1 + 10) % 10, 'X');      //set n1 to occupied
+            if(n4 == 'X' && n1 == 'X' && n2 == 'X'){        //corner 1
+                this.tempGrid.setValue(row, col, 'X');
                 return;
             }
-            if (n2 == 'X' && n5 == 'X'){                                    //corner 2
-                this.tempGrid.setValue(row-1, (col+1 + 10) % 10, 'X');      //set n3 to occupied
+            if(n2 == 'X' && n3 == 'X' && n5 == 'X'){        //corner 2
+                this.tempGrid.setValue(row, col, 'X');
                 return;
             }
-            if (n5 == 'X' && n7 == 'X'){                                    //corner 3
-                this.tempGrid.setValue(row+1, (col+1 + 10) % 10, 'X');      //set n8 to occupied
+            if(n5 == 'X' && n8 == 'X' && n7 == 'X'){        //corner 3
+                this.tempGrid.setValue(row, col, 'X');
                 return;
             }
-            if (n7 == 'X' && n4 == 'X'){                                    //corner 4
-                this.tempGrid.setValue(row+1, (col-1 + 10) % 10, 'X');      //set n6 to occupied
+            if(n7 == 'X' && n6 == 'X' && n4 == 'X'){        //corner 4
+                this.tempGrid.setValue(row, col, 'X');
                 return;
             }
     }
